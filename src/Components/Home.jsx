@@ -11,7 +11,7 @@ import ToastService from "../assets/toastService";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { fetchOngs } from "../services/api";  // import da função
+import { fetchOngs } from "../services/api"; 
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({

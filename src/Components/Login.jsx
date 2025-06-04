@@ -7,7 +7,7 @@ import ToastService from "../assets/toastService";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { loginUser } from "../services/api";  // <<< Ajuste importante
+import { loginUser } from "../services/api";  
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });

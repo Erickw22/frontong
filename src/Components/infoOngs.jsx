@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import "../styles/teste.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import ToastService from "../assets/toastService";
 
-const api = axios.create({
-  baseURL: "http://localhost:5000/ongs",
-});
+// Usar a função importada que consome a API
+import { fetchOngDetails } from "../services/api"; 
 
 const InfoOngs = () => {
   const { id } = useParams();
@@ -22,8 +20,8 @@ const InfoOngs = () => {
       setLoading(true);
       ToastService.loading("loading-ong", "Carregando detalhes da ONG...");
       try {
-        const res = await api.get(`/details/${id}`);
-        setOng(res.data);
+        const res = await fetchOngDetails(id);
+        setOng(res.data);  // ajusta conforme retorno da função
         ToastService.dismiss("loading-ong");
         ToastService.success("Detalhes carregados com sucesso!");
       } catch (err) {
