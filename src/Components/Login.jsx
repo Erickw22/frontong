@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { FiLogIn, FiMail, FiLock } from "react-icons/fi";
 import "../styles/Login.css";
@@ -7,6 +6,8 @@ import "../styles/Login.css";
 import ToastService from "../assets/toastService";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import { loginUser } from "../services/api";  // <<< Ajuste importante
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -22,8 +23,9 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     ToastService.loading("login-loading", "Validando credenciais...");
+
     try {
-      const res = await axios.post("http://localhost:5000/auth/login", formData);
+      const res = await loginUser(formData);   // <<< Aqui usamos a instância API
 
       localStorage.setItem("token", res.data.token);
       ToastService.dismiss("login-loading");
