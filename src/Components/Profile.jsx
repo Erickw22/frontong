@@ -7,7 +7,7 @@ import ToastService from '../assets/toastService';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { updateUserProfile } from '../services/api'; 
+import { fetchUserProfile, updateUserProfile } from '../services/api'; 
 
 const Profile = () => {
   const [userData, setUserData] = useState({ firstName: '', lastName: '', email: '' });
@@ -29,16 +29,20 @@ const Profile = () => {
 
       ToastService.loading('loading-profile', 'Carregando dados do perfil...');
       try {
-        const res = await fetch('http://localhost:5000/auth/me', {
+        fetchUserProfile.defaults = {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }).then(r => r.json());
+        };
+
+        const res = await fetchUserProfile({
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         setUserData({
-          firstName: res.firstName || '',
-          lastName: res.lastName || '',
-          email: res.email || '',
+          firstName: res.data.firstName || '',
+          lastName: res.data.lastName || '',
+          email: res.data.email || '',
         });
         ToastService.dismiss('loading-profile');
       } catch (err) {
@@ -84,13 +88,13 @@ const Profile = () => {
       if (!token) return;
       ToastService.loading('loading-profile', 'Recarregando dados...');
       try {
-        const res = await fetch('http://localhost:5000/auth/me', {
+        const res = await fetchUserProfile({
           headers: { Authorization: `Bearer ${token}` },
-        }).then(r => r.json());
+        });
         setUserData({
-          firstName: res.firstName || '',
-          lastName: res.lastName || '',
-          email: res.email || '',
+          firstName: res.data.firstName || '',
+          lastName: res.data.lastName || '',
+          email: res.data.email || '',
         });
         ToastService.dismiss('loading-profile');
       } catch {
@@ -113,7 +117,18 @@ const Profile = () => {
 
     ToastService.loading('saving-profile', 'Salvando alterações...');
     try {
-      await updateUserProfile(userData, token);
+      await updateUserProfile(
+        {
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          email: userData.email,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       ToastService.dismiss('saving-profile');
       ToastService.success('Perfil atualizado com sucesso!');
       setEditing(false);

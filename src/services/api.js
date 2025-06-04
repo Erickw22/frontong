@@ -7,15 +7,18 @@ const API = axios.create({
 // Login de usuário (rota POST /auth/login)
 export const loginUser = (credentials) => API.post("/auth/login", credentials);
 
+// Registro de usuário (rota POST /auth/register)
 export const registerUser = (userData) => API.post("/auth/register", userData);
 
-
+// Buscar dados do usuário autenticado (rota GET /auth/me)
+// Recebe token no header (tem que setar manualmente antes da chamada)
 export const fetchUserProfile = () => API.get("/auth/me");
 
 // Atualizar dados do usuário autenticado (rota PATCH /auth/me)
 // Recebe token no header (tem que setar manualmente antes da chamada)
 export const updateUserProfile = (updatedData) => API.patch("/auth/me", updatedData);
 
+// Registro de ONG (rota POST /ongs/register)
 export const registerOng = (ongData) => API.post("/ongs/register", ongData);
 
 // Buscar lista de ONGs (rota GET /ongs/list)
