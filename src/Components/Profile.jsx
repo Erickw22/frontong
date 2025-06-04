@@ -7,7 +7,7 @@ import ToastService from '../assets/toastService';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { fetchUserProfile, updateUserProfile } from '../services/api'; 
+import { fetchUserProfile, updateUserProfile } from '../services/api';
 
 const Profile = () => {
   const [userData, setUserData] = useState({ firstName: '', lastName: '', email: '' });
@@ -24,17 +24,12 @@ const Profile = () => {
       if (!token) {
         ToastService.error('Usuário não autenticado.');
         setLoading(false);
+        navigate('/login');
         return;
       }
 
       ToastService.loading('loading-profile', 'Carregando dados do perfil...');
       try {
-        fetchUserProfile.defaults = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-
         const res = await fetchUserProfile({
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -44,6 +39,7 @@ const Profile = () => {
           lastName: res.data.lastName || '',
           email: res.data.email || '',
         });
+
         ToastService.dismiss('loading-profile');
       } catch (err) {
         ToastService.dismiss('loading-profile');
@@ -124,9 +120,7 @@ const Profile = () => {
           email: userData.email,
         },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
       ToastService.dismiss('saving-profile');
@@ -138,6 +132,7 @@ const Profile = () => {
         err.response?.data?.msg ||
           'Erro ao atualizar perfil. Verifique os dados e tente novamente.'
       );
+      console.error('Erro ao atualizar perfil:', err);
     } finally {
       setSaving(false);
     }

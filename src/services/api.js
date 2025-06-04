@@ -4,27 +4,18 @@ const API = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000",
 });
 
-// Login de usuário (rota POST /auth/login)
 export const loginUser = (credentials) => API.post("/auth/login", credentials);
 
-// Registro de usuário (rota POST /auth/register)
 export const registerUser = (userData) => API.post("/auth/register", userData);
 
-// Buscar dados do usuário autenticado (rota GET /auth/me)
-// Recebe token no header (tem que setar manualmente antes da chamada)
-export const fetchUserProfile = () => API.get("/auth/me");
+export const fetchUserProfile = (config) => API.get("/auth/me", config);
 
-// Atualizar dados do usuário autenticado (rota PATCH /auth/me)
-// Recebe token no header (tem que setar manualmente antes da chamada)
-export const updateUserProfile = (updatedData) => API.patch("/auth/me", updatedData);
+export const updateUserProfile = (updatedData, config) => API.patch("/auth/me", updatedData, config);
 
-// Registro de ONG (rota POST /ongs/register)
 export const registerOng = (ongData) => API.post("/ongs/register", ongData);
 
-// Buscar lista de ONGs (rota GET /ongs/list)
 export const fetchOngs = () => API.get("/ongs/list");
 
-// Buscar detalhes da ONG por id (rota GET /ongs/details/:id)
 export const fetchOngDetails = (id) => API.get(`/ongs/details/${id}`);
 
 export default API;
