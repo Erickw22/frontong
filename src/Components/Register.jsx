@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FiUser, FiMail, FiLock, FiAlertCircle, FiEdit } from 'react-icons/fi';
+
+import { registerUser } from '../services/api'; 
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +25,7 @@ const Register = () => {
     setIsLoading(true);
 
     try {
-      await axios.post('http://localhost:5000/auth/register', formData);
+      await registerUser(formData); 
       navigate('/login');
     } catch (err) {
       setError(err.response?.data?.msg || 'Erro ao criar conta. Tente novamente.');
@@ -91,7 +92,6 @@ const Register = () => {
             />
           </div>
 
-          {/* Senha */}
           <div className="input-group">
             <FiLock />
             <input
