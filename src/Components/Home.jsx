@@ -4,13 +4,14 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "../styles/Home.css";
-import axios from "axios";
-import logo from '../assets/logo02.png';
 
+import logo from '../assets/logo02.png';
 
 import ToastService from "../assets/toastService";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import { fetchOngs } from "../services/api";  // import da função
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -20,21 +21,17 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
 });
 
-const api = axios.create({
-  baseURL: "http://localhost:5000/ongs",
-});
-
 const Home = () => {
   const [ongs, setOngs] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchOngs = async () => {
+    const getOngs = async () => {
       setLoading(true);
       ToastService.loading("loading-toast", "Carregando lista de ONGs...");
       try {
-        const res = await api.get("/list");
+        const res = await fetchOngs();
         setOngs(res.data);
         ToastService.dismiss("loading-toast");
         ToastService.success("Lista de ONGs carregada com sucesso!");
@@ -52,7 +49,7 @@ const Home = () => {
       }
     };
 
-    fetchOngs();
+    getOngs();
   }, []);
 
   return (
